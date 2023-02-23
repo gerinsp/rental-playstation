@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\Playstation;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -112,15 +113,23 @@ class HomeController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
         $validatedData = $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user->id),
+            ],
             'password' => 'required|min:8',
             'status' => 'required'
         ]);
 
-        $validatedData['password'] = Hash::make($validatedData['password']);
-
+        if ($request->password === $user->password) {
+            unset($validatedData['password']);
+        } else {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        }
         User::where('id', $id)->update($validatedData);
 
         return redirect('/profile')->with('success', 'Profile berhasil di update.');
