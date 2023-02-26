@@ -20,13 +20,14 @@
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">
-                Data Playstation
+                Jadwal Booking {{ $device->nama }}
             </h6>
             <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 </a>
-                <a href="{{ route('playstation.create') }}" class="btn btn-primary btn-sm">Tambah Data</a>
+
+                <a href="/booking/{{ $device->id }}/add" class="btn btn-primary btn-sm">Booking</a>
             </div>
         </div>
         <!-- Card Body -->
@@ -35,39 +36,45 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Gambar</th>
                         <th scope="col">Nama</th>
-                        <th scope="col">Harga Normal</th>
-                        <th scope="col">Harga Member</th>
-                        <th scope="col">Stok</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Jam Main</th>
+                        <th scope="col">Waktu Mulai</th>
+                        <th scope="col">Waktu Selesai</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($plays as $play)
+                    @foreach ($transactions as $transaction)
                         <tr>
                             <th scope="row">
-                                {{ ($plays->currentpage() - 1) * $plays->perpage() + $loop->index + 1 }}</th>
-                            <td><img width="150px" src="{{ asset('storage/' . $play->image) }}">
+                                {{ ($transactions->currentpage() - 1) * $transactions->perpage() + $loop->index + 1 }}</th>
+
+                            @if ($transaction->status === 'member')
+                                <td>{{ $transaction->member->nama }}</td>
+                            @else
+                                <td>{{ $transaction->nama }}</td>
+                            @endif
+                            <td>{{ ucfirst($transaction->status) }}
                             </td>
-                            <td>{{ $play->nama }}</td>
-                            <td>{{ 'Rp ' . number_format($play->harga_normal, 0, ',', '.') }}</td>
-                            <td>{{ 'Rp ' . number_format($play->harga_member, 0, ',', '.') }}</td>
-                            <td>{{ $play->stok }}</td>
-                            <td>
-                                <a href="/playstation/{{ $play->id }}/edit"><i class="fas fa-edit"></i></a>
-                                <form action="/playstation/{{ $play->id }}" method="post" class="d-inline">
+                            <td>{{ $transaction->jam_main . ' Jam' }}</td>
+                            <td>{{ $transaction->waktu_mulai }}</td>
+                            <td>{{ $transaction->waktu_Selesai }}</td>
+
+                            @if (auth()->user()->status === 'admin')
+                                <a href="/device/{{ $device->id }}/edit"><i class="fas fa-edit"></i></a>
+                                <form action="/device/{{ $device->id }}" method="post" class="d-inline">
                                     @method('delete')
                                     @csrf
                                     <button class="border-0 bg-white" onclick="return confirm('Are you sure?')"><i
                                             class="fas fa-trash-alt text-danger"></i></button>
                                 </form>
-                            </td>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            {{ $plays->links() }}
+            {{ $transactions->links() }}
         </div>
     </div>
     </div>

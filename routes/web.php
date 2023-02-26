@@ -24,8 +24,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('/members', App\Http\Controllers\MemberController::class)->middleware('auth');
 Route::resource('/playstation', App\Http\Controllers\PlayController::class)->middleware('auth');
 Route::resource('/transaction', App\Http\Controllers\TransactionController::class)->middleware('auth');
+Route::resource('/device', App\Http\Controllers\DeviceController::class)->middleware('auth');
+
+Route::put('/transaction/{id}/update', 'App\Http\Controllers\TransactionController@updateStatus')->middleware('auth');
 Route::get('/report', 'App\Http\Controllers\ReportController@index')->middleware('auth')->name('report');
 Route::get('/generate-pdf', 'App\Http\Controllers\ReportController@generatePDF')->middleware('auth');
+Route::get('/generate-excel', 'App\Http\Controllers\ReportController@generateExcel')->middleware('auth')->name('laporan.excel');
+
+
+Route::get('/booking/{id}/add', 'App\Http\Controllers\DeviceController@bookingAdd')->middleware('auth');
+Route::get('/booking/{id}', 'App\Http\Controllers\DeviceController@booking')->middleware('auth');
 
 Route::get('/chart-data', 'App\Http\Controllers\HomeController@pieCartData');
 Route::get('/profile', 'App\Http\Controllers\HomeController@profile')->middleware('auth')->name('profile');

@@ -49,6 +49,7 @@ class PlayController extends Controller
             'nama' => 'required|min:3',
             'harga_normal' => 'required',
             'harga_member' => 'required',
+            'stok' => 'required',
             'image' => 'image|file|max:1024'
         ]);
 
@@ -80,7 +81,7 @@ class PlayController extends Controller
      */
     public function edit($id)
     {
-        $play = Playstation::find($id)->first();
+        $play = Playstation::find($id);
         return view('playstation.edit', [
             'title' => 'Edit Playstation',
             'active' => 'play',
@@ -102,6 +103,7 @@ class PlayController extends Controller
             'nama' => 'required|min:3',
             'harga_normal' => 'required',
             'harga_member' => 'required',
+            'stok' => 'required',
             'image' => 'image|file|max:1024'
         ]);
 

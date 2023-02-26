@@ -74,7 +74,7 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        $member = Member::find($id)->first();
+        $member = Member::find($id);
         return view('member.ubah', [
             'title' => 'Edit Member',
             'active' => 'member',

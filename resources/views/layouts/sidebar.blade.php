@@ -11,12 +11,14 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item {{ $active === 'dashboard' ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('home') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
+    @if (auth()->user()->status === 'admin' || auth()->user()->status === 'owner')
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item {{ $active === 'dashboard' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('home') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -38,31 +40,40 @@
                 <i class="fas fa-gamepad"></i>
                 <span>Data Playstation</span></a>
         </li>
+    @endif
+
+    @if (auth()->user()->status === 'user' || auth()->user()->status === 'admin')
+        <li class="nav-item {{ $active === 'device' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('device.index') }}">
+                <i class="fas fa-tv"></i>
+                <span>Data Perangkat</span></a>
+        </li>
 
         <li class="nav-item {{ $active === 'transaction' ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('transaction.index') }}">
                 <i class="fas fa-shopping-cart"></i>
                 <span>Transaksi</span></a>
         </li>
-
         <!-- Divider -->
         <hr class="sidebar-divider">
     @endif
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Laporan
-    </div>
 
-    <!-- Nav Item - Pages Collapse Menu -->
+    @if (auth()->user()->status === 'admin' || auth()->user()->status === 'owner')
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Laporan
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
 
 
-    <!-- Nav Item - Charts -->
-    <li class="nav-item {{ $active === 'report' ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('report') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Laporan</span></a>
-    </li>
-
+        <!-- Nav Item - Charts -->
+        <li class="nav-item {{ $active === 'report' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('report') }}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Laporan</span></a>
+        </li>
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

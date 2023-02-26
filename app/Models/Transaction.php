@@ -16,8 +16,13 @@ class Transaction extends Model
         return $this->belongsTo(Member::class);
     }
 
-    public function playstation()
+    public function device()
     {
-        return $this->belongsTo(Playstation::class);
+        return $this->belongsTo(Device::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

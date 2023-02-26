@@ -20,13 +20,16 @@
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">
-                Data Playstation
+                Data Perangkat
             </h6>
             <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 </a>
-                <a href="{{ route('playstation.create') }}" class="btn btn-primary btn-sm">Tambah Data</a>
+
+                @if (auth()->user()->status === 'admin')
+                    <a href="{{ route('device.create') }}" class="btn btn-primary btn-sm">Tambah Data</a>
+                @endif
             </div>
         </div>
         <!-- Card Body -->
@@ -35,39 +38,46 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Gambar</th>
-                        <th scope="col">Nama</th>
-                        <th scope="col">Harga Normal</th>
-                        <th scope="col">Harga Member</th>
-                        <th scope="col">Stok</th>
+                        <th scope="col">Nama Perangkat</th>
+                        <th scope="col">Jenis Playstation</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($plays as $play)
+                    @foreach ($devices as $device)
                         <tr>
                             <th scope="row">
-                                {{ ($plays->currentpage() - 1) * $plays->perpage() + $loop->index + 1 }}</th>
-                            <td><img width="150px" src="{{ asset('storage/' . $play->image) }}">
-                            </td>
-                            <td>{{ $play->nama }}</td>
-                            <td>{{ 'Rp ' . number_format($play->harga_normal, 0, ',', '.') }}</td>
-                            <td>{{ 'Rp ' . number_format($play->harga_member, 0, ',', '.') }}</td>
-                            <td>{{ $play->stok }}</td>
-                            <td>
-                                <a href="/playstation/{{ $play->id }}/edit"><i class="fas fa-edit"></i></a>
-                                <form action="/playstation/{{ $play->id }}" method="post" class="d-inline">
+                                {{ ($devices->currentpage() - 1) * $devices->perpage() + $loop->index + 1 }}</th>
+                            <td>{{ $device->nama }}</td>
+                            <td>{{ $device->playstation->nama }}</td>
+                            @if ($device->status === 'tersedia')
+                                <td><i class="fa fa-circle text-success" aria-hidden="true"></i>
+                                    {{ ucfirst($device->status) }}</td>
+                                <td>
+                                @else
+                                <td><i class="fa fa-circle text-danger" aria-hidden="true"></i>
+                                    {{ ucfirst($device->status) }}</td>
+                                <td>
+                            @endif
+
+                            @if (auth()->user()->status === 'admin')
+                                <a href="/device/{{ $device->id }}/edit"><i class="fas fa-edit"></i></a>
+                                <form action="/device/{{ $device->id }}" method="post" class="d-inline">
                                     @method('delete')
                                     @csrf
                                     <button class="border-0 bg-white" onclick="return confirm('Are you sure?')"><i
                                             class="fas fa-trash-alt text-danger"></i></button>
                                 </form>
-                            </td>
+                                </td>
+                            @else
+                                <a href="/booking/{{ $device->id }}" class="btn btn-sm btn-primary">Lihat Jadwal</a>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            {{ $plays->links() }}
+            {{ $devices->links() }}
         </div>
     </div>
     </div>

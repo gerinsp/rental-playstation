@@ -11,8 +11,8 @@ class Playstation extends Model
 
     protected $guarded = [];
 
-    public function transaction()
+    public function device()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Device::class);
     }
 }

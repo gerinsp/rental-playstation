@@ -9,17 +9,17 @@
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">
-                    Form Transaksi
+                    Form Booking {{ $device->nama }}
                 </h6>
             </div>
             <!-- Card Body -->
             <div class="card-body">
                 <form method="POST" action="{{ route('transaction.store') }}">
                     @csrf
+                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                     <input type="hidden" id="id_transaksi" name="id_transaksi">
-                    <input type="hidden" name="status_transaksi" value="sukses">
-                    <input type="hidden" name="transaksi" value="transaksi">
-                    <input type="hidden" name="status_device" value="digunakan">
+                    <input type="hidden" name="device_id" id="device_id" value="{{ $device->id }}">
+                    <input type="hidden" name="status_transaksi" value="pending">
                     <div class="mb-3">
                         <label for="status">Status Keanggotaan</label>
                         <select class="form-control" id="status" name="status" onchange="onChangeWrapper()">
@@ -50,18 +50,6 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-3" id="device">
-                        <label for="device">Nama Perangkat</label>
-                        <select class="form-control" id="device_id" name="device_id" onchange="showPrice()">
-                            @foreach ($devices as $device)
-                                @if (old('device_id') == $device->id)
-                                    <option value="{{ $device->id }}" selected>{{ $device->nama }}</option>
-                                @else
-                                    <option value="{{ $device->id }}">{{ $device->nama }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
                     <div class="mb-3">
                         <label for="harga" class="form-label ">Harga</label>
                         <input type="number" class="form-control @error('harga') is-invalid @enderror" id="harga"
@@ -73,20 +61,21 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="waktu_mulai" class="form-label ">Jam Mulai</label>
-                        <input type="text" class="form-control @error('waktu_mulai') is-invalid @enderror"
-                            id="waktu_mulai" name="waktu_mulai" required autofocus value="{{ old('waktu_mulai') }}">
-                        @error('waktu_mulai')
+                        <label for="jam_main" class="form-label ">Jam Main</label>
+                        <input type="number" class="form-control @error('jam_main') is-invalid @enderror" id="jam_main"
+                            name="jam_main" required autofocus value="{{ old('jam_main') }}" onchange="showTotal()">
+                        @error('jam_main')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="jam_main" class="form-label ">Jam Main</label>
-                        <input type="number" class="form-control @error('jam_main') is-invalid @enderror" id="jam_main"
-                            name="jam_main" required autofocus value="{{ old('jam_main') }}" onchange="showChangeMaster()">
-                        @error('jam_main')
+                        <label for="waktu_mulai" class="form-label ">Jam Mulai</label>
+                        <input type="time" class="form-control @error('waktu_mulai') is-invalid @enderror"
+                            id="waktu_mulai" name="waktu_mulai" required autofocus value="{{ old('waktu_mulai') }}"
+                            onchange="showTime()">
+                        @error('waktu_mulai')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -121,23 +110,13 @@
     <script>
         const nama = document.getElementById('nama');
         const member = document.getElementById('member');
-        const d = new Date();
 
         member.style.display = "none";
         nama.style.display = "none";
-        console.log(d.getHours() + " : " + d.getMinutes());
-
-        document.getElementById('waktu_mulai').value =
-            `${d.getHours() < 10 ? '0' + d.getHours() : d.getHours() }:${d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()}`;
 
         function onChangeWrapper() {
             showInput();
             showPrice();
-        }
-
-        function showChangeMaster() {
-            showTime();
-            showTotal();
         }
 
         function showInput() {
@@ -159,7 +138,6 @@
             const harga = document.getElementById('harga');
             const jamMain = parseFloat(document.getElementById('jam_main').value);
             let status = document.getElementById('status').value;
-            console.log(device)
             axios.get('/api/get-harga', {
                     params: {
                         device: device

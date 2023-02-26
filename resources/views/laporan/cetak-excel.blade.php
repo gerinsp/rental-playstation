@@ -23,27 +23,40 @@
 </head>
 
 <body style="font-size: 15px">
-    <h3 class="text-center mb-3">
-        Laporan Transaksi Rental Playstation
-    </h3>
-    <p class="mb-2">Dari Tanggal: {{ $starDate }} Sampai: {{ $endDate }}</p>
-    <table class="table">
+    <table>
+        <thead></thead>
+        <tbody>
+            <tr>
+                <td colspan="8" style="text-align: center; font-size:20px; font-weight: bold;">
+                    <h3 class="text-center mb-3">
+                        Laporan Transaksi Rental Playstation
+                    </h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <p>Dari Tanggal: {{ $startDate }} Sampai: {{ $endDate }}</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
         <thead>
             <tr>
-                <th scope="col">ID Transaksi</th>
-                <th scope="col">Nama</th>
-                <th scope="col">Jenis Transaksi</th>
-                <th scope="col">Nama Perangkat</th>
-                <th scope="col">Jenis Playstation</th>
-                <th scope="col">Lama Waktu</th>
-                <th scope="col">Total</th>
-                <th scope="col">Tanggal Transaksi</th>
+                <th scope="col" style="font-weight:bold">ID Transaksi</th>
+                <th scope="col" style="font-weight:bold">Nama</th>
+                <th scope="col" style="font-weight:bold">Jenis Transaksi</th>
+                <th scope="col" style="font-weight:bold">Nama Perangkat</th>
+                <th scope="col" style="font-weight:bold">Jenis Playstation</th>
+                <th scope="col" style="font-weight:bold">Lama Waktu</th>
+                <th scope="col" style="font-weight:bold">Total</th>
+                <th scope="col" style="font-weight:bold">Tanggal Transaksi</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($transactions as $transaksi)
                 <tr>
-                    <td>{{ $transaksi->id_transaksi }}</td>
+                    <td style="text-align: left">{{ $transaksi->id_transaksi }}</td>
                     @if ($transaksi->status === 'member')
                         <td>{{ $transaksi->member->nama }}</td>
                     @else
@@ -75,7 +88,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
 </body>
 
 </html>

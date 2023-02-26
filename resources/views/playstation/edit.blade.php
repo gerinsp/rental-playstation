@@ -50,6 +50,16 @@
                         @enderror
                     </div>
                     <div class="mb-3">
+                        <label for="stok" class="form-label ">Stok</label>
+                        <input type="number" class="form-control @error('stok') is-invalid @enderror" id="stok"
+                            name="stok" required autofocus value="{{ old('stok', $play->stok) }}">
+                        @error('stok')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
                         <label for="image" class="form-label">Upload Image</label>
                         @if ($play->image)
                             <img src="{{ asset('storage/' . $play->image) }}"

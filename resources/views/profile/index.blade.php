@@ -55,9 +55,15 @@
                                     @if (old('status', auth()->user()->status) === 'admin')
                                         <option value="admin" selected>Admin</option>
                                         <option value="owner">Owner</option>
-                                    @else
+                                        <option value="user">User</option>
+                                    @elseif(old('status', auth()->user()->status) === 'owner')
                                         <option value="admin">Admin</option>
                                         <option value="owner" selected>Owner</option>
+                                        <option value="user">User</option>
+                                    @else
+                                        <option value="admin">Admin</option>
+                                        <option value="owner">Owner</option>
+                                        <option value="user" selected>User</option>
                                     @endif
                                 </select>
                             </div>

@@ -18,14 +18,15 @@ class CreateTransactionsTable extends Migration
             $table->string('status');
             $table->unsignedBigInteger('member_id')->nullable();
             $table->string('nama')->nullable();
-            $table->unsignedBigInteger('playstation_id');
+            $table->unsignedBigInteger('device_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('harga');
             $table->string('jam_main');
+            $table->time('waktu_mulai');
+            $table->time('waktu_Selesai');
             $table->string('total');
+            $table->string('status_transaksi')->nullable();
             $table->timestamps();
-
-            $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
-            $table->foreign('playstation_id')->references('id')->on('playstations')->onDelete('cascade');
         });
     }
 
