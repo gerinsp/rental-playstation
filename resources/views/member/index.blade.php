@@ -47,7 +47,7 @@
                         <tr>
                             <th scope="row">
                                 {{ ($members->currentpage() - 1) * $members->perpage() + $loop->index + 1 }}</th>
-                            <td>{{ $member->nama }}</td>
+                            <td>{{ $member->user->name }}</td>
                             <td>{{ $member->jenis_kelamin }}</td>
                             <td>{{ $member->no_telepon }}</td>
                             <td>{{ $member->alamat }}</td>

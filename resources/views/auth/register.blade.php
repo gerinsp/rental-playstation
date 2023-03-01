@@ -39,7 +39,7 @@
                                 </div>
                                 <form class="user" method="POST" action="{{ route('register') }}">
                                     @csrf
-                                    <input type="hidden" name="status" value="admin">
+                                    <input type="hidden" name="status" value="user">
                                     <div class="form-group">
                                         <input id="name" type="text"
                                             class="form-control form-control-user @error('name') is-invalid @enderror"

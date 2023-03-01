@@ -17,14 +17,13 @@
                 <form method="POST" action="{{ route('members.store') }}">
                     @csrf
                     <div class="mb-3">
-                        <label for="nama" class="form-label ">Nama</label>
-                        <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama"
-                            name="nama" required autofocus value="{{ old('nama') }}">
-                        @error('nama')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
+                        <label for="user_id">Nama</label>
+                        <select class="form-control" id="user_id" name="user_id">
+                            <option>- Pilih User -</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="jenis_kelamin">Jenis Kelamin</label>

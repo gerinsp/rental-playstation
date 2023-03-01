@@ -20,7 +20,7 @@
                     <div class="mb-3">
                         <label for="nama" class="form-label ">Nama</label>
                         <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama"
-                            name="nama" required autofocus value="{{ old('nama', $member->nama) }}">
+                            name="nama" required autofocus value="{{ old('nama', $member->user->name) }}" disabled>
                         @error('nama')
                             <div class="invalid-feedback">
                                 {{ $message }}

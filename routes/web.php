@@ -36,6 +36,7 @@ Route::get('/booking/{id}/add', 'App\Http\Controllers\DeviceController@bookingAd
 Route::get('/booking/{id}', 'App\Http\Controllers\DeviceController@booking')->middleware('auth');
 
 Route::get('/chart-data', 'App\Http\Controllers\HomeController@pieCartData');
+Route::get('/chart-pie-data', 'App\Http\Controllers\HomeController@pieCartData2');
 Route::get('/profile', 'App\Http\Controllers\HomeController@profile')->middleware('auth')->name('profile');
 Route::put('/profile/{id}', 'App\Http\Controllers\HomeController@update')->middleware('auth');
 

@@ -6,6 +6,7 @@ use App\Models\Device;
 use App\Models\Member;
 use App\Models\Playstation;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -18,14 +19,14 @@ class TransactionController extends Controller
     public function index()
     {
         if (auth()->user()->status === 'admin') {
-            $transaction = Transaction::paginate(5);
+            $transaction = Transaction::latest()->paginate(5);
             return view('transaction.index', [
                 'title' => 'Data Tansaksi',
                 'active' => 'transaction',
                 'transactions' => $transaction
             ]);
         } else {
-            $transaction = Transaction::where('user_id', auth()->user()->id)->paginate(5);
+            $transaction = Transaction::where('user_id', auth()->user()->id)->latest()->paginate(5);
             return view('transaction.index', [
                 'title' => 'Data Tansaksi',
                 'active' => 'transaction',
@@ -61,13 +62,14 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        $tanggal = Carbon::now()->format('Y-m-d');
         $start_time = $request->waktu_mulai;
         $end_time = $request->waktu_Selesai;
         if ($start_time > '22:00' || $start_time < '08:00') {
             return redirect('booking/' . $request->device_id)->with('gagal', 'Maaf, rental sudah tutup!. Silahkan melakukan booking ketika rental sudah beroprasi kembali pada pukul 08:00.');
         }
         // Mengecek apakah waktu mulai dan waktu selesai sudah ada di database
-        $existingTransaction = Transaction::where('device_id', $request->device_id)
+        $existingTransaction = Transaction::where('device_id', $request->device_id)->whereDate('created_at', $tanggal)
             ->where(function ($query) use ($start_time, $end_time) {
                 $query->where(function ($query) use ($start_time) {
                     $query->where('waktu_mulai', '<=', $start_time)

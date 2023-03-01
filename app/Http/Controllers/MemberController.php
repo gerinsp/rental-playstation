@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Member;
+use App\Models\User;
 
 class MemberController extends Controller
 {
@@ -29,9 +30,12 @@ class MemberController extends Controller
      */
     public function create()
     {
+        $user = User::where('status',  'user')->get();
+
         return view('member.create', [
             'title' => 'Create Member',
-            'active' => 'member'
+            'active' => 'member',
+            'users' => $user
         ]);
     }
 
@@ -44,7 +48,7 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'nama' => 'required|min:3',
+            'user_id' => 'required',
             'jenis_kelamin' => 'required',
             'no_telepon' => 'required',
             'alamat' => 'required'
@@ -92,7 +96,7 @@ class MemberController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'nama' => 'required|min:3',
+            'user_id' => '',
             'jenis_kelamin' => 'required',
             'no_telepon' => 'required|max:12|min:12',
             'alamat' => 'required'

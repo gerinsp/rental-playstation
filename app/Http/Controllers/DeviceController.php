@@ -31,6 +31,13 @@ class DeviceController extends Controller
             }
         }
 
+        if ($transactions->isEmpty()) {
+            foreach ($device as $d) {
+                $d->status = 'tersedia';
+                $d->save();
+            }
+        }
+
         $device = Device::paginate(5);
         return view('device.index', [
             'title' => 'Data Perangkat',
@@ -144,8 +151,10 @@ class DeviceController extends Controller
 
     public function booking($id)
     {
+        $tanggal = Carbon::now()->format('Y-m-d');
         $device = Device::find($id);
-        $transactions = Transaction::where('device_id', $id)->paginate(5);
+        $transactions = Transaction::where('device_id', $id)->whereDate('created_at', $tanggal)->paginate(5);
+        // ddd($transactions);
         return view('device.booking', [
             'title' => 'Booking',
             'active' => 'device',
@@ -164,7 +173,7 @@ class DeviceController extends Controller
             'active' => 'device',
             'members' => $member,
             'playstations' => $playstation,
-            'device' => $device
+            'device' => $device,
         ]);
     }
 }

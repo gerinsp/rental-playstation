@@ -14,7 +14,7 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <form method="POST" action="{{ route('transaction.store') }}">
+                <form method="POST" action="{{ route('transaction.store') }}" id="form">
                     @csrf
                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                     <input type="hidden" id="id_transaksi" name="id_transaksi">
@@ -22,38 +22,42 @@
                     <input type="hidden" name="status_transaksi" value="pending">
                     <div class="mb-3">
                         <label for="status">Status Keanggotaan</label>
-                        <select class="form-control" id="status" name="status" onchange="onChangeWrapper()">
-                            <option value="member">-Pilih Status-</option>
-                            <option value="member">Member</option>
-                            <option value="umum">Umum</option>
-                        </select>
-                    </div>
-                    <div class="mb-3" id="nama">
-                        <label for="nama" class="form-label ">Nama</label>
-                        <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama"
-                            name="nama" value="{{ old('nama') }}">
-                        @error('nama')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="mb-3" id="member">
-                        <label for="member">Nama Member</label>
-                        <select class="form-control" id="member_id" name="member_id">
+                        <select class="form-control" id="status" name="status" disabled>
                             @foreach ($members as $member)
-                                @if (old('member_id') == $member->id)
-                                    <option value="{{ $member->id }}" selected>{{ $member->nama }}</option>
+                                @if ($member->user_id == auth()->user()->id)
+                                    <option value="member" selected>Member</option>
                                 @else
-                                    <option value="{{ $member->id }}">{{ $member->nama }}</option>
+                                    <option value="umum" selected>Umum</option>
                                 @endif
                             @endforeach
                         </select>
                     </div>
+
+                    @foreach ($members as $member)
+                        @if ($member->user_id == auth()->user()->id)
+                            <div class="mb-3" id="member">
+                                <label for="member">Nama Member</label>
+                                <select class="form-control" id="member_id" name="member_id" disabled>
+                                    <option value="{{ $member->id }}" selected>{{ $member->user->name }}</option>
+                                </select>
+                            </div>
+                        @else
+                            <div class="mb-3" id="nama">
+                                <label for="nama" class="form-label ">Nama</label>
+                                <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                    id="nama" name="nama" value="{{ old('nama', auth()->user()->name) }}" disabled>
+                                @error('nama')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        @endif
+                    @endforeach
                     <div class="mb-3">
                         <label for="harga" class="form-label ">Harga</label>
                         <input type="number" class="form-control @error('harga') is-invalid @enderror" id="harga"
-                            name="harga" required autofocus value="{{ old('harga') }}">
+                            name="harga" required autofocus value="{{ old('harga') }}" disabled>
                         @error('harga')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -84,7 +88,8 @@
                     <div class="mb-3">
                         <label for="waktu_Selesai" class="form-label ">Jam Selesai</label>
                         <input type="text" class="form-control @error('waktu_Selesai') is-invalid @enderror"
-                            id="waktu_Selesai" name="waktu_Selesai" required autofocus value="{{ old('waktu_Selesai') }}">
+                            id="waktu_Selesai" name="waktu_Selesai" required autofocus value="{{ old('waktu_Selesai') }}"
+                            disabled>
                         @error('waktu_Selesai')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -94,7 +99,7 @@
                     <div class="mb-3">
                         <label for="total" class="form-label ">Total</label>
                         <input type="number" class="form-control @error('total') is-invalid @enderror" id="total"
-                            name="total" required autofocus value="{{ old('total') }}">
+                            name="total" required autofocus value="{{ old('total') }}" disabled>
                         @error('total')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -103,37 +108,35 @@
                     </div>
                     <div class="mb-3">
                         <button class="btn btn-primary btn-sm" type="submit" onclick="generateId()">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
     <script>
-        const nama = document.getElementById('nama');
-        const member = document.getElementById('member');
+        const form = document.getElementById('form')
+        const status = document.getElementById('status')
+        const member = document.getElementById('member_id')
+        const nama = document.getElementById('nama')
+        const harga = document.getElementById('harga')
+        const waktu_selesai = document.getElementById('waktu_Selesai')
+        const total = document.getElementById('total')
 
-        member.style.display = "none";
-        nama.style.display = "none";
-
-        function onChangeWrapper() {
-            showInput();
-            showPrice();
-        }
-
-        function showInput() {
-            const status = document.getElementById('status').value;
-            const nama = document.getElementById('nama');
-            const member = document.getElementById('member');
-
-            if (status === 'member') {
-                member.style.display = "block";
-                nama.style.display = "none";
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            status.disabled = false;
+            if (member) {
+                member.disabled = false;
             } else {
-                member.style.display = "none";
-                nama.style.display = "block";
+                nama.disabled = false;
             }
-        }
+            harga.disabled = false;
+            waktu_selesai.disabled = false;
+            total.disabled = false;
+            form.submit();
+        })
 
-        function showPrice() {
+        document.addEventListener("DOMContentLoaded", function() {
             const device = document.getElementById('device_id').value;
             const harga = document.getElementById('harga');
             const jamMain = parseFloat(document.getElementById('jam_main').value);
@@ -158,7 +161,7 @@
                 .catch(function(error) {
                     console.log(error)
                 });
-        }
+        });
 
         function showTotal() {
             const harga = parseFloat(document.getElementById('harga').value);

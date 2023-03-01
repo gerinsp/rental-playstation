@@ -43,9 +43,9 @@
                         <select class="form-control" id="member_id" name="member_id">
                             @foreach ($members as $member)
                                 @if (old('member_id') == $member->id)
-                                    <option value="{{ $member->id }}" selected>{{ $member->nama }}</option>
+                                    <option value="{{ $member->id }}" selected>{{ $member->user->name }}</option>
                                 @else
-                                    <option value="{{ $member->id }}">{{ $member->nama }}</option>
+                                    <option value="{{ $member->id }}">{{ $member->user->name }}</option>
                                 @endif
                             @endforeach
                         </select>

@@ -59,7 +59,7 @@
                         <tr>
                             <td>{{ $transaksi->id_transaksi }}</td>
                             @if ($transaksi->status === 'member')
-                                <td>{{ $transaksi->member->nama }}</td>
+                                <td>{{ $transaksi->member->user->name }}</td>
                             @else
                                 <td>{{ $transaksi->nama }}</td>
                             @endif

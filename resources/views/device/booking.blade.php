@@ -50,7 +50,7 @@
                                 {{ ($transactions->currentpage() - 1) * $transactions->perpage() + $loop->index + 1 }}</th>
 
                             @if ($transaction->status === 'member')
-                                <td>{{ $transaction->member->nama }}</td>
+                                <td>{{ $transaction->member->user->name }}</td>
                             @else
                                 <td>{{ $transaction->nama }}</td>
                             @endif
